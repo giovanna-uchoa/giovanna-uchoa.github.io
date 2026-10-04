@@ -1,4 +1,4 @@
-import type { ArchiveGroup, SubjectSummary, Post, Subject } from './dataTypes';
+import type { ArchiveGroup, Language, SubjectSummary, Post, Subject, Tag, TagSummary } from './dataTypes';
 
 export function getPostPath(post: Pick<Post, 'id' | 'subjectId'>): string {
   return `/subjects/${post.subjectId}/post/${post.id}`;
@@ -186,4 +186,30 @@ export function buildMonthlyActivity(posts: Post[], monthsBack = 12): MonthlyAct
 
 export function formatAccessionNumber(id: number): string {
   return `№${String(id).padStart(3, '0')}`;
+}
+
+
+// Posts without a `lang` are shown in every language.
+export function filterPostsByLanguage<T extends Pick<Post, 'lang'>>(posts: T[], lang: Language): T[] {
+  return posts.filter((post) => !post.lang || post.lang === lang);
+}
+
+function countTags(posts: Pick<Post, 'tags'>[]): Map<string, number> {
+  const counts = new Map<string, number>();
+  for (const post of posts) {
+    for (const tag of post.tags ?? []) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+  }
+  return counts;
+}
+
+export function buildTagList(posts: Pick<Post, 'tags'>[]): Tag[] {
+  return [...countTags(posts).keys()]
+    .sort((a, b) => a.localeCompare(b))
+    .map((name) => ({ name, slug: toTagSlug(name) }));
+}
+
+export function buildTagSummary(posts: Pick<Post, 'tags'>[]): TagSummary[] {
+  return [...countTags(posts).entries()]
+    .map(([name, totalPosts]) => ({ slug: toTagSlug(name), label: name, totalPosts }))
+    .sort((a, b) => b.totalPosts - a.totalPosts || a.label.localeCompare(b.label));
 }

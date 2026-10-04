@@ -47,6 +47,7 @@ jobs:
           VITE_GITHUB_BRANCH: main
           VITE_APP_NAME: ${{ vars.VITE_APP_NAME }}
           VITE_APP_TITLE: ${{ vars.VITE_APP_TITLE }}
+          VITE_APP_BIO: ${{ vars.VITE_APP_BIO }}
           VITE_SOCIAL_GITHUB: ${{ vars.VITE_SOCIAL_GITHUB }}
           VITE_SOCIAL_GITLAB: ${{ vars.VITE_SOCIAL_GITLAB }}
           VITE_SOCIAL_LINKEDIN: ${{ vars.VITE_SOCIAL_LINKEDIN }}

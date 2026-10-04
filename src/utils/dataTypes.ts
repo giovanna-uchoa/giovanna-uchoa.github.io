@@ -8,6 +8,8 @@ export interface Subject {
   blogSectionTitle: string;
 }
 
+export type Language = 'pt' | 'en';
+
 export interface Post {
   id: number;
   title: string;
@@ -17,6 +19,7 @@ export interface Post {
   timeSpent: string;
   subjectId: string;
   tags: string[];
+  lang?: Language;
 }
 
 export interface Tag {

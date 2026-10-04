@@ -46,7 +46,7 @@ function getActiveSection(pathname: string): string {
 const STATUS_AUTO_DISMISS_MS = 4000
 
 function AdminLayout() {
-  const { subjects, posts, tags, tagSummary, loading, error, reload } = useCmsContent()
+  const { subjects, posts, tags, tagSummary, loading, error, reload } = useCmsContent({ allLanguages: true })
   const location = useLocation()
   const navigate = useNavigate()
 

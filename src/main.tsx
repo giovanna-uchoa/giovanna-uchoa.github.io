@@ -1,6 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { ThemeProvider } from "./theme/ThemeProvider.tsx";
+import { LanguageProvider } from "./i18n/LanguageProvider.tsx";
 import App from "./App.tsx";
 
 // Old links used HashRouter (/#/post/15). Rewrite them to path URLs before the router mounts.
@@ -12,7 +13,9 @@ if (legacyHashRoute) {
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider>
-      <App />
+      <LanguageProvider>
+        <App />
+      </LanguageProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

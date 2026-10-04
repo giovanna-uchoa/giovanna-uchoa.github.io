@@ -4,11 +4,13 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
+import { useLanguage } from '../i18n/LanguageProvider';
 
 const appName = import.meta.env.VITE_APP_NAME;
 
 function Footer() {
   const theme = useTheme();
+  const { t } = useLanguage();
   const year = new Date().getFullYear();
 
   return (
@@ -37,9 +39,9 @@ function Footer() {
           </Stack>
 
           <Typography variant="caption" sx={{ color: theme.palette.text.secondary, opacity: 0.8 }}>
-            © {year} Some rights reserved · CC BY-NC 4.0
+            © {year} {t('footer.rights')} · CC BY-NC 4.0
             <br />
-            Star icon by Maxicons · The Noun Project (CC BY 3.0)
+            {t('footer.icon')} · The Noun Project (CC BY 3.0)
           </Typography>
         </Stack>
       </Container>

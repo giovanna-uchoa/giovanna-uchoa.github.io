@@ -11,7 +11,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
 import Alert from '@mui/material/Alert';
 import { cmsApi } from '../../utils/cmsApi';
-import type { Post, Subject, Tag } from '../../utils/dataTypes';
+import type { Language, Post, Subject, Tag } from '../../utils/dataTypes';
 import { formatAccessionNumber, normalizePostDate, sortPostsByDateDesc } from '../../utils/contentTaxonomy';
 import { getErrorMessage } from '../../utils/errors';
 import MarkdownEditor from './MarkdownEditor';
@@ -40,6 +40,7 @@ interface PostFormState {
   timeSpent: string;
   subjectId: string;
   selectedTags: string[];
+  lang: Language | '';
 }
 
 const EMPTY_POST = {
@@ -50,6 +51,7 @@ const EMPTY_POST = {
   timeSpent: '',
   subjectId: '',
   selectedTags: [] as string[],
+  lang: '' as Language | '',
 } satisfies PostFormState;
 
 function PostForm({
@@ -121,6 +123,7 @@ function PostForm({
       timeSpent: postForm.timeSpent,
       subjectId: postForm.subjectId,
       tags: postForm.selectedTags,
+      ...(postForm.lang ? { lang: postForm.lang } : {}),
     };
 
     const wasEditing = editingPostId !== null;
@@ -161,6 +164,7 @@ function PostForm({
         timeSpent: fullPost.timeSpent,
         subjectId: fullPost.subjectId,
         selectedTags: fullPost.tags ?? [],
+        lang: fullPost.lang ?? '',
       };
 
       setEditingPostId(fullPost.id);
@@ -262,6 +266,20 @@ function PostForm({
                     setPostForm(prev => ({ ...prev, timeSpent: event.target.value }))
                   }
                 />
+                <TextField
+                  select
+                  fullWidth
+                  label="Language"
+                  value={postForm.lang}
+                  onChange={event =>
+                    setPostForm(prev => ({ ...prev, lang: event.target.value as Language | '' }))
+                  }
+                  helperText="Posts with no language show in both."
+                >
+                  <MenuItem value="">Not set</MenuItem>
+                  <MenuItem value="pt">Português</MenuItem>
+                  <MenuItem value="en">English</MenuItem>
+                </TextField>
               </Stack>
               <Autocomplete
                 multiple

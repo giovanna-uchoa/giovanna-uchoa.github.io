@@ -38,7 +38,7 @@ src/
   App.tsx                     # Root component, routes, layout
   main.tsx                    # Entry point
   components/
-    Header.tsx                # Top nav with active-route pills
+    shell/                    # App shell: sidebar, mobile top bar, right rail, language switch
     Footer.tsx
     Hero.tsx
     MarkdownContent.tsx       # GFM renderer (raw HTML is escaped)
@@ -134,6 +134,7 @@ Create a `.env` file at the project root (see `.env.sample`):
 ```env
 VITE_APP_NAME=
 VITE_APP_TITLE=
+VITE_APP_BIO=            # optional one-line bio under the name in the sidebar
 
 VITE_SOCIAL_GITHUB=
 VITE_SOCIAL_GITLAB=
