@@ -36,10 +36,6 @@ export default function App() {
         sx={{
           minHeight: '100vh',
           backgroundColor: theme.palette.background.default,
-          backgroundImage:
-            theme.palette.mode === 'light'
-              ? 'radial-gradient(circle at 15% 5%, rgba(31, 58, 46, 0.08), transparent 45%)'
-              : 'radial-gradient(circle at 15% 5%, rgba(224, 169, 74, 0.08), transparent 45%)',
           display: 'flex',
           flexDirection: 'column',
         }}

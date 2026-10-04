@@ -1,7 +1,8 @@
 import { ThemeOptions } from '@mui/material/styles';
 
-export const headingFont = ['"Fraunces"', '"Palatino Linotype"', '"Book Antiqua"', 'Palatino', 'serif'].join(',');
-const bodyFont = ['"Inter"', '"Segoe UI"', '"Helvetica Neue"', 'sans-serif'].join(',');
+export const headingFont = ['"Source Serif 4"', 'Georgia', '"Times New Roman"', 'serif'].join(',');
+const bodyFont = ['"IBM Plex Sans"', '"Segoe UI"', '"Helvetica Neue"', 'sans-serif'].join(',');
+export const monoFont = ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'].join(',');
 
 export interface ContentPalette {
   markdownCodeBackground: string;
@@ -14,20 +15,20 @@ export interface ContentPalette {
 export function getContentPalette(mode: 'light' | 'dark'): ContentPalette {
   if (mode === 'dark') {
     return {
-      markdownCodeBackground: '#211c14',
-      markdownCodeText: '#ece4d0',
-      markdownBlockquoteBorder: '#e0a94a',
-      markdownBlockquoteBackground: '#18140f',
-      elevatedShadow: '0 18px 32px rgba(0,0,0,0.36)',
+      markdownCodeBackground: '#1c2029',
+      markdownCodeText: '#e8eaee',
+      markdownBlockquoteBorder: '#8fa3ff',
+      markdownBlockquoteBackground: '#1c2340',
+      elevatedShadow: '0 8px 24px rgba(0,0,0,0.4)',
     };
   }
 
   return {
-    markdownCodeBackground: '#e9e2cd',
-    markdownCodeText: '#1c2c22',
-    markdownBlockquoteBorder: '#b8863b',
-    markdownBlockquoteBackground: '#faf6ec',
-    elevatedShadow: '0 18px 32px rgba(31,58,46,0.12)',
+    markdownCodeBackground: '#eceef2',
+    markdownCodeText: '#15181e',
+    markdownBlockquoteBorder: '#2845d6',
+    markdownBlockquoteBackground: '#e8ecfc',
+    elevatedShadow: '0 1px 2px rgba(21,24,30,0.06), 0 8px 24px rgba(21,24,30,0.06)',
   };
 }
 
@@ -75,8 +76,9 @@ const sharedTypography: ThemeOptions['typography'] = {
     lineHeight: 1.55,
   },
   overline: {
-    fontWeight: 600,
-    letterSpacing: '0.12em',
+    fontFamily: monoFont,
+    fontWeight: 500,
+    letterSpacing: '0.06em',
   },
   button: {
     textTransform: 'none',
@@ -84,10 +86,10 @@ const sharedTypography: ThemeOptions['typography'] = {
   },
 };
 
-const lightDivider = '#ddd3ba';
-const lightSecondaryMain = '#b8863b';
-const darkDivider = '#2e2820';
-const darkSecondaryMain = '#e0a94a';
+const lightDivider = '#e2e3e6';
+const lightAccent = '#2845d6';
+const darkDivider = '#262a33';
+const darkAccent = '#8fa3ff';
 
 function sharedComponents(mode: 'light' | 'dark'): ThemeOptions['components'] {
   const isLight = mode === 'light';
@@ -96,7 +98,7 @@ function sharedComponents(mode: 'light' | 'dark'): ThemeOptions['components'] {
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
+          borderRadius: 6,
           transition: 'all 0.2s ease',
         },
       },
@@ -104,13 +106,12 @@ function sharedComponents(mode: 'light' | 'dark'): ThemeOptions['components'] {
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 10,
+          borderRadius: 8,
           border: `1px solid ${isLight ? lightDivider : darkDivider}`,
           boxShadow: 'none',
-          transition: 'border-color 0.2s ease, transform 0.2s ease',
+          transition: 'border-color 0.2s ease',
           '&:hover': {
-            borderColor: isLight ? lightSecondaryMain : darkSecondaryMain,
-            transform: 'translateY(-4px)',
+            borderColor: isLight ? lightAccent : darkAccent,
           },
         },
       },
@@ -125,7 +126,9 @@ function sharedComponents(mode: 'light' | 'dark'): ThemeOptions['components'] {
     MuiChip: {
       styleOverrides: {
         root: {
-          borderRadius: 7,
+          borderRadius: 4,
+          fontFamily: monoFont,
+          fontSize: '0.75rem',
         },
       },
     },
@@ -135,25 +138,25 @@ function sharedComponents(mode: 'light' | 'dark'): ThemeOptions['components'] {
 export const themeOptions: ThemeOptions = {
   palette: {
     primary: {
-      main: '#1f3a2e',
-      light: '#3f5d4d',
-      dark: '#0f2019',
-      contrastText: '#faf6ec',
+      main: lightAccent,
+      light: '#5a73e6',
+      dark: '#1b32a0',
+      contrastText: '#ffffff',
     },
     secondary: {
-      main: lightSecondaryMain,
-      light: '#d1a862',
-      dark: '#8f6526',
-      contrastText: '#1c1610',
+      main: lightAccent,
+      light: '#5a73e6',
+      dark: '#1b32a0',
+      contrastText: '#ffffff',
     },
     background: {
-      default: '#f2ebda',
-      paper: '#faf6ec',
+      default: '#f7f7f5',
+      paper: '#ffffff',
     },
     text: {
-      primary: '#1c2c22',
-      secondary: '#5c6659',
-      disabled: '#96a08f',
+      primary: '#15181e',
+      secondary: '#5a6070',
+      disabled: '#8a90a0',
     },
     divider: lightDivider,
     mode: 'light',
@@ -165,25 +168,25 @@ export const themeOptions: ThemeOptions = {
 export const darkThemeOptions: ThemeOptions = {
   palette: {
     primary: {
-      main: '#ece4d0',
-      light: '#faf6ec',
-      dark: '#c2b8a3',
-      contrastText: '#100e0b',
+      main: darkAccent,
+      light: '#b3c0ff',
+      dark: '#6a80e6',
+      contrastText: '#0e1014',
     },
     secondary: {
-      main: darkSecondaryMain,
-      light: '#eac47f',
-      dark: '#a97d34',
-      contrastText: '#100e0b',
+      main: darkAccent,
+      light: '#b3c0ff',
+      dark: '#6a80e6',
+      contrastText: '#0e1014',
     },
     background: {
-      default: '#100e0b',
-      paper: '#18140f',
+      default: '#0e1014',
+      paper: '#161920',
     },
     text: {
-      primary: '#ece4d0',
-      secondary: '#a89e8c',
-      disabled: '#665e50',
+      primary: '#e8eaee',
+      secondary: '#a0a6b4',
+      disabled: '#6b7180',
     },
     divider: darkDivider,
     mode: 'dark',
