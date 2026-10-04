@@ -4,7 +4,7 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Drawer from '@mui/material/Drawer';
+import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
@@ -39,38 +39,33 @@ function MobileBar() {
         backgroundImage: 'none',
       })}
     >
-      <Toolbar sx={{ gap: 1 }}>
+      <Toolbar sx={{ gap: 1.5 }}>
         <Box
           component={RouterLink}
           to="/"
           onClick={close}
-          sx={{ display: 'flex', alignItems: 'center', gap: 1, flex: 1, minWidth: 0, textDecoration: 'none', color: 'inherit' }}
+          sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flex: 1, minWidth: 0, textDecoration: 'none', color: 'inherit' }}
         >
           <ProfileAvatar size={36} />
-          <Typography noWrap sx={{ fontFamily: headingFont, fontWeight: 600, fontSize: '1rem' }}>
+          <Typography noWrap sx={{ fontFamily: headingFont, fontWeight: 600, fontSize: '1.125rem' }}>
             {appName}
           </Typography>
         </Box>
-        <LanguageSwitch />
-        <ThemeToggle />
-        <IconButton onClick={() => setOpen((prev) => !prev)} aria-label={t('shell.menu')} aria-expanded={open} sx={{ color: 'text.secondary' }}>
+        <IconButton onClick={() => setOpen((prev) => !prev)} aria-label={t('shell.menu')} aria-expanded={open} aria-controls="mobile-nav" sx={{ color: 'text.secondary' }}>
           {open ? <X size={22} /> : <Menu size={22} />}
         </IconButton>
       </Toolbar>
 
-      <Drawer
-        anchor="top"
-        open={open}
-        onClose={close}
-        ModalProps={{ keepMounted: true }}
-        sx={{
-          '& .MuiDrawer-paper': (theme) => ({
-            backgroundColor: theme.palette.background.paper,
-            borderBottom: `1px solid ${theme.palette.divider}`,
-          }),
-        }}
+      <Collapse
+        in={open}
+        sx={(theme) => ({
+          backgroundColor: theme.palette.background.paper,
+          borderTop: open ? `1px solid ${theme.palette.divider}` : 'none',
+          maxHeight: 'calc(100vh - 56px)',
+          overflowY: 'auto',
+        })}
       >
-        <Box component="nav" aria-label={t('shell.mainNav')} sx={{ p: 3 }}>
+        <Box component="nav" id="mobile-nav" aria-label={t('shell.mainNav')} sx={{ p: 3 }}>
           <Stack spacing={0.5}>
             {navItems.map(({ label, href, icon: Icon }) => {
               const active = isActiveRoute(pathname, href);
@@ -94,9 +89,20 @@ function MobileBar() {
               );
             })}
           </Stack>
-          <SocialLinks sx={{ mt: 2 }} />
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+            sx={(theme) => ({ mt: 2, pt: 2, borderTop: `1px solid ${theme.palette.divider}` })}
+          >
+            <SocialLinks />
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <LanguageSwitch />
+              <ThemeToggle />
+            </Stack>
+          </Stack>
         </Box>
-      </Drawer>
+      </Collapse>
     </AppBar>
   );
 }
