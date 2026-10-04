@@ -1,4 +1,4 @@
-import type { Post, Subject, Tag, TagSummary } from './dataTypes'
+import type { Language, Post, Subject, Tag, TagSummary } from './dataTypes'
 import { getRawFile, getFileWithSha, putFile, deleteFile } from './githubClient'
 import { parseFrontmatter, stringifyFrontmatter } from './frontmatter'
 import { normalizePostDate, getPostDate, toTagSlug, dedupeTags } from './contentTaxonomy'
@@ -21,6 +21,7 @@ interface PostFrontmatter {
   timeSpent: string
   subjectId: string
   tags: string[]
+  lang?: Language
 }
 
 interface SubjectFrontmatter {
@@ -45,6 +46,7 @@ function postSummary(post: Post): PostSummary {
     timeSpent: post.timeSpent,
     subjectId: post.subjectId,
     tags: post.tags,
+    ...(post.lang ? { lang: post.lang } : {}),
   }
 }
 
@@ -61,6 +63,7 @@ function toPostFrontmatter(post: Post): PostFrontmatter {
     timeSpent: post.timeSpent,
     subjectId: post.subjectId,
     tags: post.tags,
+    ...(post.lang ? { lang: post.lang } : {}),
   }
 }
 
@@ -82,10 +85,24 @@ function subjectFilePath(id: string): string {
   return `content/subjects/${id}.md`
 }
 
-async function readManifest(): Promise<Manifest> {
-  const raw = await getRawFile(MANIFEST_PATH)
-  if (!raw) return { subjects: [], posts: [] }
-  return JSON.parse(raw) as Manifest
+// Several components (page + shell rail) read the manifest on the same load, so share
+// one fetch. Writes and `resetCmsCache` drop it; a failed read is not cached.
+let manifestRead: Promise<Manifest> | null = null
+
+export function resetCmsCache(): void {
+  manifestRead = null
+}
+
+function readManifest(): Promise<Manifest> {
+  if (!manifestRead) {
+    manifestRead = getRawFile(MANIFEST_PATH)
+      .then((raw) => (raw ? (JSON.parse(raw) as Manifest) : { subjects: [], posts: [] }))
+      .catch((error) => {
+        manifestRead = null
+        throw error
+      })
+  }
+  return manifestRead
 }
 
 async function readManifestForWrite(): Promise<{ manifest: Manifest; sha: string | undefined }> {
@@ -99,6 +116,7 @@ async function writeManifest(
   sha: string | undefined,
   message: string
 ): Promise<void> {
+  manifestRead = null
   await putFile(MANIFEST_PATH, `${JSON.stringify(manifest, null, 2)}\n`, message, sha)
 }
 
@@ -116,6 +134,7 @@ async function readPostFile(id: number): Promise<Post | null> {
     timeSpent: data.timeSpent,
     subjectId: data.subjectId,
     tags: dedupeTags(data.tags),
+    ...(data.lang === 'pt' || data.lang === 'en' ? { lang: data.lang } : {}),
   }
 }
 

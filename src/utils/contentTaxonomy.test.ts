@@ -3,7 +3,10 @@ import {
   buildArchiveGroups,
   buildMonthlyActivity,
   buildSubjectSummary,
+  buildTagList,
+  buildTagSummary,
   dedupeTags,
+  filterPostsByLanguage,
   formatAccessionNumber,
   formatPostDate,
   getPostDate,
@@ -171,3 +174,25 @@ describe('buildMonthlyActivity', () => {
     })
   })
 })
+
+
+describe('language filtering and tag derivation', () => {
+  const posts = [
+    makePost({ id: 1, lang: 'pt', tags: ['floss', 'git'] }),
+    makePost({ id: 2, lang: 'en', tags: ['floss'] }),
+    makePost({ id: 3, tags: ['git'] }),
+  ];
+
+  it('keeps posts in the chosen language and posts with no language', () => {
+    expect(filterPostsByLanguage(posts, 'pt').map((post) => post.id)).toEqual([1, 3]);
+    expect(filterPostsByLanguage(posts, 'en').map((post) => post.id)).toEqual([2, 3]);
+  });
+
+  it('derives tag counts from the posts it is given', () => {
+    expect(buildTagSummary(filterPostsByLanguage(posts, 'en'))).toEqual([
+      { slug: 'floss', label: 'floss', totalPosts: 1 },
+      { slug: 'git', label: 'git', totalPosts: 1 },
+    ]);
+    expect(buildTagList(posts).map((tag) => tag.name)).toEqual(['floss', 'git']);
+  });
+});

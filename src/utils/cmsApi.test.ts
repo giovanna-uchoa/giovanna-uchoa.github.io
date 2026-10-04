@@ -36,7 +36,7 @@ vi.mock('./githubClient', () => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mock = (await import('./githubClient')) as any
-const { cmsApi } = await import('./cmsApi')
+const { cmsApi, resetCmsCache } = await import('./cmsApi')
 
 interface SeedPost {
   id: number
@@ -63,6 +63,7 @@ function seedPostFile(post: SeedPost) {
 
 beforeEach(() => {
   mock.__reset()
+  resetCmsCache()
 })
 
 describe('cmsApi post id generation', () => {

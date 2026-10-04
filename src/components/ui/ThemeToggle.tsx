@@ -1,9 +1,11 @@
 import Box from '@mui/material/Box';
 import { Contrast } from 'lucide-react';
 import { useThemeMode } from '../../theme/ThemeProvider';
+import { useLanguage } from '../../i18n/LanguageProvider';
 
 function ThemeToggle() {
   const { mode, toggleTheme } = useThemeMode();
+  const { t } = useLanguage();
   const isDark = mode === 'dark';
 
   const rotation = isDark ? 'rotate(0deg)' : 'rotate(180deg)';
@@ -12,13 +14,13 @@ function ThemeToggle() {
     <Box
       component="button"
       onClick={toggleTheme}
-      aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+      aria-label={isDark ? t('shell.themeToLight') : t('shell.themeToDark')}
       sx={(theme) => ({
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
-        width: 34,
-        height: 34,
+        width: 40,
+        height: 40,
         borderRadius: '50%',
         border: 'none',
         cursor: 'pointer',

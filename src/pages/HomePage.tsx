@@ -10,6 +10,7 @@ import {
   sortPostsByDateDesc,
 } from '../utils/contentTaxonomy';
 
+import { RIGHT_RAIL_MIN_VIEWPORT } from '../components/shell/RightRail';
 import Hero from '../components/Hero';
 import AsyncBoundary from '../components/ui/state/AsyncBoundary';
 import FeaturedTileGrid from '../components/ui/FeaturedTileGrid';
@@ -34,6 +35,8 @@ function HomePage() {
             gridTemplateColumns: {
               xs: '1fr',
               lg: '2fr 1fr',
+              // the shell's right rail takes over the catalog and tag lists
+              [`@media (min-width:${RIGHT_RAIL_MIN_VIEWPORT}px)`]: '1fr',
             },
             gap: { xs: 3, sm: 4, lg: 6 },
             width: '100%',
@@ -61,8 +64,8 @@ function HomePage() {
             </Stack>
           </Box>
 
-          {/* Sidebar */}
-          <Box>
+          {/* Side lists (the right rail shows these on wide screens) */}
+          <Box sx={{ [`@media (min-width:${RIGHT_RAIL_MIN_VIEWPORT}px)`]: { display: 'none' } }}>
             <Stack spacing={4}>
               <Stack spacing={1.5}>
                 <Typography variant="h6">Catalog</Typography>
