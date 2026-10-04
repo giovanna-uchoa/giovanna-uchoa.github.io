@@ -18,11 +18,11 @@ npm run test:watch     # Vitest in watch mode
 
 Type-checking runs implicitly through the Vite/SWC build (no standalone `tsc --noEmit` script exists — run `npx tsc --noEmit` directly if type verification is needed without a full build).
 
-To run the app against a real backend, create `.env` at the project root (see `.env.sample`) with `VITE_GITHUB_OWNER`, `VITE_GITHUB_REPO`, and `VITE_GITHUB_BRANCH` pointing at the GitHub repo that holds the `content/` folder. There is no database and no migration step — content lives as files in that repo. Admin writes additionally require a GitHub Personal Access Token, entered at `/#/admin` login (kept in `sessionStorage`, never in `.env`).
+To run the app against a real backend, create `.env` at the project root (see `.env.sample`) with `VITE_GITHUB_OWNER`, `VITE_GITHUB_REPO`, and `VITE_GITHUB_BRANCH` pointing at the GitHub repo that holds the `content/` folder. There is no database and no migration step — content lives as files in that repo. Admin writes additionally require a GitHub Personal Access Token, entered at `/admin` login (kept in `sessionStorage`, never in `.env`).
 
 ## Architecture
 
-**Stack**: React 18 + TypeScript, Vite (SWC), Material UI v5, React Router (`HashRouter`, so routes are `/#/...`), GitHub Contents API as the backend (no server, no database), `react-markdown` + `remark-gfm`, `js-yaml` for frontmatter.
+**Stack**: React 18 + TypeScript, Vite (SWC), Material UI v5, React Router (`BrowserRouter`, so routes are plain paths like `/post/15`), GitHub Contents API as the backend (no server, no database), `react-markdown` + `remark-gfm`, `js-yaml` for frontmatter.
 
 ### Data flow
 
@@ -46,11 +46,11 @@ Tags are not a standalone entity — each post's frontmatter carries a plain `ta
 
 ### Auth
 
-Admin panel (`/#/admin`) uses a GitHub Personal Access Token, not a session. `LoginDialog.tsx` calls `githubAuth.validateToken(token)`; on success the token is stored via `setStoredToken` (`sessionStorage` only — cleared when the tab closes) and `AdminPage.tsx` re-validates it on mount to restore/verify the session. There's no app-level role system and no RLS-equivalent — access control is "possession of a PAT with write access to the configured repo," enforced implicitly wherever `githubClient.ts` needs to authenticate a write.
+Admin panel (`/admin`) uses a GitHub Personal Access Token, not a session. `LoginDialog.tsx` calls `githubAuth.validateToken(token)`; on success the token is stored via `setStoredToken` (`sessionStorage` only — cleared when the tab closes) and `AdminPage.tsx` re-validates it on mount to restore/verify the session. There's no app-level role system and no RLS-equivalent — access control is "possession of a PAT with write access to the configured repo," enforced implicitly wherever `githubClient.ts` needs to authenticate a write.
 
 ### Routing & pages
 
-Routes are declared in `src/App.tsx` using `HashRouter`, with every page lazy-loaded via `React.lazy`. Route params (`subjectId`/`postId`/`tagSlug`) are used directly as `cmsApi` lookup keys (see `pages/`). Post URLs exist in two forms — `/subjects/:subjectId/post/:postId` and `/post/:postId` — both resolved by the same `PostPage`.
+Routes are declared in `src/App.tsx` using `BrowserRouter`, with every page lazy-loaded via `React.lazy`. The site is served from the domain root on GitHub Pages (`base: '/'`); the build copies `index.html` to `404.html` (see `spaFallback` in `vite.config.ts`) so deep links load the app, and `main.tsx` rewrites legacy `/#/...` links to path URLs before mounting. Route params (`subjectId`/`postId`/`tagSlug`) are used directly as `cmsApi` lookup keys (see `pages/`). Post URLs exist in two forms — `/subjects/:subjectId/post/:postId` and `/post/:postId` — both resolved by the same `PostPage`.
 
 ### Theming
 

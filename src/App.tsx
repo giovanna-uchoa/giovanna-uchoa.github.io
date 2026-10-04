@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -31,7 +31,7 @@ export default function App() {
   const theme = useTheme();
 
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Box 
         sx={{
           minHeight: '100vh',
@@ -77,6 +77,6 @@ export default function App() {
         </Container>
         <Footer />
       </Box>
-    </HashRouter>
+    </BrowserRouter>
   );
 }

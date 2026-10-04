@@ -13,7 +13,7 @@ Original UI inspired by [Figma – Personal Tech Portfolio Blog (Community)](htt
 - Browse posts grouped by **subject** or explore all entries in the **catalog**
 - **Tag system** — tags live as a string array in each post's frontmatter; assign tags to posts and filter at `/tags/:tagSlug`
 - **Archives** — posts grouped by year/month
-- **Admin panel** at `/#/admin` — create, edit, and delete subjects, posts, and tags (requires a GitHub Personal Access Token)
+- **Admin panel** at `/admin` — create, edit, and delete subjects, posts, and tags (requires a GitHub Personal Access Token)
 - Dark / light theme toggle, both built around a single "special collections reading room" identity (forest green + brass accent on parchment in light mode, a warm neutral near-black in dark mode)
 - Markdown rendering with GFM support (tables, strikethrough, task lists)
 
@@ -175,6 +175,6 @@ npm run build
 
 ## Notes
 
-**Admin panel**: Navigate to `/#/admin` and enter a GitHub Personal Access Token with `repo` scope on the configured repository. The token is kept only in `sessionStorage` (cleared when the tab closes) — it's never written to `.env` or persisted anywhere else.
+**Admin panel**: Navigate to `/admin` and enter a GitHub Personal Access Token with `repo` scope on the configured repository. The token is kept only in `sessionStorage` (cleared when the tab closes) — it's never written to `.env` or persisted anywhere else.
 
 **Post dates**: Dates are entered, stored in frontmatter, and displayed as `yyyy/mm/dd` — there's no separate database storage format to convert to/from.
