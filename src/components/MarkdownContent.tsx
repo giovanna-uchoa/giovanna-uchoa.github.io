@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
-import { getContentPalette } from '../theme/muiTheme';
+import { getContentPalette, monoFont } from '../theme/muiTheme';
 
 interface MarkdownContentProps {
   content: string;
@@ -84,7 +84,7 @@ function MarkdownContent({ content }: MarkdownContentProps) {
                   px: 0.5,
                   py: 0.25,
                   borderRadius: '4px',
-                  fontFamily: 'monospace',
+                  fontFamily: monoFont,
                   backgroundColor: contentPalette.markdownCodeBackground,
                   color: contentPalette.markdownCodeText,
                 }}
